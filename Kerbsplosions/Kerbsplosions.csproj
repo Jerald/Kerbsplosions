@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="IntegrityModule.cs" />
     <Compile Include="KerbsplosionsModule.cs" />
     <Compile Include="Boxifier.cs" />
     <Compile Include="RayGo.cs" />

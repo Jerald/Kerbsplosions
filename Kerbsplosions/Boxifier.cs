@@ -1,3 +1,6 @@
+//Written by Oscar (Matrixmage)
+//Semi-inspired by some code from Ferram4
+
 using System;
 using System.Collections;
 using System.Collections.Generic;

@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿//Written by Lev (CaptainLeviathan)
+//Mostly edited by Oscar (Matrixmage)
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
