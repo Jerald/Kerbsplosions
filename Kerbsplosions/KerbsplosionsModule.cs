@@ -72,7 +72,7 @@ namespace Kerbsplosions
             //Value override checks
 
             #region Default value loading
-            if (ExplosiveType == "LiquidFuel")
+            if (ExplosiveType == "LiquidFuel".ToLower())
             {
                 if (overrideDetonationVelocity)
                 {
@@ -97,7 +97,7 @@ namespace Kerbsplosions
                     ExplosionRadius = Mathf.Pow((ExplosiveMass / GasDensity) / ((4 / 3) * Mathf.PI), 1 / 3) * 10;
                 }
             }
-            else if (ExplosiveType == "SolidFuel")
+            else if (ExplosiveType == "SolidFuel".ToLower())
             {
                 if (overrideDetonationVelocity)
                 {
@@ -119,7 +119,7 @@ namespace Kerbsplosions
                     ExplosionRadius = Mathf.Pow((ExplosiveMass / GasDensity) / ((4 / 3) * Mathf.PI), 1 / 3) * 10;
                 }
             }
-            else if (ExplosiveType == "TNT")
+            else if (ExplosiveType == "TNT".ToLower())
             {
                 if (overrideDetonationVelocity)
                 {

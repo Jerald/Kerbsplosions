@@ -25,24 +25,24 @@ namespace Kerbsplosions
             {
                 Integrity = part.crashTolerance;
             }
+
+            currentIntegrity = Integrity;
         }
 
         void Update()
         {
-            if (Integrity == 0.0F)
-            {
-                Integrity = part.crashTolerance;
-            }
-
             if (Integrity != 0.0F)
             {
                 integrityPercentage = ((currentIntegrity / Integrity) * 100);
             }
 
+            Debug.Log("[Kerbsplosions] Integrity: " + Integrity);
+            Debug.Log("[Kerbsplosions] Current Integrity: " + currentIntegrity);
+
             //Part death
             if (currentIntegrity <= 0)
             {
-                part.explode();
+                Destroy(part);
             }
             //Part death
         }
