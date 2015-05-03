@@ -36,12 +36,13 @@ namespace Kerbsplosions
                 integrityPercentage = ((currentIntegrity / Integrity) * 100);
             }
 
-            Debug.Log("[Kerbsplosions] Integrity: " + Integrity);
-            Debug.Log("[Kerbsplosions] Current Integrity: " + currentIntegrity);
+            //Debug.Log("[Kerbsplosions] Integrity: " + Integrity);
+            //Debug.Log("[Kerbsplosions] Current Integrity: " + currentIntegrity);
 
             //Part death
             if (currentIntegrity <= 0)
             {
+                //part.explode();
                 Destroy(part);
             }
             //Part death
