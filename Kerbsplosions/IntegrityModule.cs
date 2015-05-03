@@ -42,7 +42,6 @@ namespace Kerbsplosions
             //Part death
             if (currentIntegrity <= 0)
             {
-                //part.explode();
                 Destroy(part);
             }
             //Part death
