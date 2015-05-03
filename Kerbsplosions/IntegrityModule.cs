@@ -16,7 +16,7 @@ namespace Kerbsplosions
         public float integrityPercentage;
 
         [KSPField(isPersistant = true)]
-        public float currentIntegrity;
+        public float currentIntegrity = 0f;
         //Non-input KSPFields
 
         void Start()
@@ -29,7 +29,15 @@ namespace Kerbsplosions
 
         void Update()
         {
-            integrityPercentage = ((currentIntegrity / Integrity) * 100);
+            if (Integrity == 0.0F)
+            {
+                Integrity = part.crashTolerance;
+            }
+
+            if (Integrity != 0.0F)
+            {
+                integrityPercentage = ((currentIntegrity / Integrity) * 100);
+            }
 
             //Part death
             if (currentIntegrity <= 0)
