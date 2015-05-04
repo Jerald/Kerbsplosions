@@ -19,7 +19,7 @@ namespace Kerbsplosions
         public float currentIntegrity = 0f;
         //Non-input KSPFields
 
-        void Start()
+        public override void OnStart(PartModule.StartState state)
         {
             if (Integrity == 0.0F)
             {

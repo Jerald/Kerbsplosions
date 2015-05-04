@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Kerbsplosions</RootNamespace>
     <AssemblyName>Kerbsplosions</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>

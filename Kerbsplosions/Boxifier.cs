@@ -36,7 +36,7 @@ namespace Kerbsplosions
                 //Part bound calculation
             }
 
-            return new Vector3Pair(part.collider.bounds.max, part.collider.bounds.min);
+            return new Vector3Pair(maxBounds, minBounds);
 		}
 
 		public static VesselBox GetVesselBoundingBox(Vessel vessel)
@@ -49,6 +49,13 @@ namespace Kerbsplosions
 
 			for (int i = 0; i < vessel.parts.Count; ++i)
 			{
+                //Null part check
+                if (vessel.parts[i] == null)
+                {
+                    continue;
+                }
+                //Null part check
+
 				Vector3Pair partBoundingBox = GetPartBoundingBox(vessel.parts[i]);
 
                 //Vessel bound computation

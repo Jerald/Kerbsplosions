@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using KSP.IO;
 
@@ -45,7 +46,7 @@ namespace Kerbsplosions
         
         float rayImpulse;
 
-        void Start()
+        public override void OnStart(PartModule.StartState state)
         {
             part.OnJustAboutToBeDestroyed += OnExplosion;
 
@@ -81,10 +82,8 @@ namespace Kerbsplosions
 
                 if (overrideExplosiveMass)
                 {
-                    //Thanks to darklight for the linq stuff!
                     fuel = part.Resources.list.Find(testResource => testResource.info.name == "LiquidFuel");
                     oxidizer = part.Resources.list.Find(testResource => testResource.info.name == "Oxidizer");
-                    //Thanks to darklight for the linq stuff!
                 }
 
                 if (overrideGasDensity)
@@ -157,6 +156,17 @@ namespace Kerbsplosions
 
         void OnExplosion()
         {
+            if (part == null)
+            {
+                Debug.Log("Part is null");
+            }
+            else
+            {
+                Debug.Log("Part isn't null");
+            }
+
+ 
+
             //ExplosionMass logic for Liquid Fuel
             if (ExplosiveType == "LiquidFuel" && overrideExplosiveMass)
             {
@@ -176,27 +186,34 @@ namespace Kerbsplosions
             }
             //ExplosionMass logic for Liquid Fuel
 
+            Debug.Log("Post explosion mass logic for liquid fuel");
+
             //Collider List definition and null check
             List<Collider> collidersToBoom = new List<Collider>(Physics.OverlapSphere(part.transform.position, ExplosionRadius));
-            for (int i = collidersToBoom.Count - 1; i >= 0; i--)
-            {
-                if (collidersToBoom[i].gameObject.GetComponentInParent<Part>() == null)
-                {
-                    collidersToBoom.Remove(collider);
-                }
-            }
+
+            collidersToBoom = collidersToBoom.Where(testCollider => testCollider != null &&
+                testCollider.gameObject.GetComponentInParent<Part>() != null &&
+                testCollider.gameObject.GetComponentInParent<Part>().vessel != null).ToList();
             //Collider List definition and null check
+
+            Debug.Log("Post collider list definition and null check");
 
             //Vessel array definition and filling
             VesselBox[] vesselBoxesToBoom = new VesselBox[collidersToBoom.Count];
+            Debug.Log("Post vesselBoxesToBoom declaration");
             for (int i = 0; i < collidersToBoom.Count; ++i)
             {
                 vesselBoxesToBoom[i] = Boxifier.GetVesselBoundingBox(collidersToBoom[i].gameObject.GetComponentInParent<Part>().vessel);
+                Debug.Log("vesselBoxesToBoom for loop iteration #" + i);
             }
             //Vessel array definition and filling
 
+            Debug.Log("Post vessel array definition and filling");
+
             Vector3[] ray360Output = RayGo.RayThreeSixty(Dispersion, ExplosionRadius);
             Ray[] rays = RayGo.getRays(part.transform.position, vesselBoxesToBoom, ray360Output);
+
+            Debug.Log("Post RayGo calling");
 
             //RaycastHit layered array definition and ray casting
             RaycastHit[][] soManyRaycastHits = new RaycastHit[rays.Length][];
@@ -205,6 +222,8 @@ namespace Kerbsplosions
                 soManyRaycastHits[i] = Physics.RaycastAll(rays[i], ExplosionRadius);
             }
             //RaycastHit layered array definition and ray casting
+
+            Debug.Log("Post RaycastHit layered array definition and ray casting");
 
             //Impulse calculation
             if (ExplosiveMass == 0.0F && (ExplosiveMassLFAtmo > 0.0F || ExplosiveMassLFO > 0.0F))
@@ -251,6 +270,8 @@ namespace Kerbsplosions
                     //Damage dealing and out-of-energy check
                 }
             }
+
+            Debug.Log("[Kerbsplosions] End of OnExplosion");
 
             part.OnJustAboutToBeDestroyed -= OnExplosion;
         }

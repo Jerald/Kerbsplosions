@@ -43,7 +43,7 @@ namespace Kerbsplosions
 		}
 	}
 	
-	public class RayGo
+	public static class RayGo
 	{
 
 		static RayGoZone Box3DToRayGoZone(Box3D box3D, Vector3 origin)
@@ -92,13 +92,13 @@ namespace Kerbsplosions
 			{
 				rotateY = (rayDispersion / radius);
 				rotaterY = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(0f, rotateY * 57.2957795f * i, 0f), new Vector3(1f, 1f, 1f));
-				newLayerPoint = rotaterY.MultiplyPoint(Vector3.forward);
+				newLayerPoint = rotaterY.MultiplyPoint3x4(Vector3.forward);
 				outPut.Add(newLayerPoint);
 				rotateZ = ((rayDispersion / radius)/Mathf.Sin(rotateY * i));
 				for (int k = 1; rotationZ < 2 * Mathf.PI; ++k)
 				{
 					rotaterZ = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(0f, 0f, rotateZ * 57.2957795f * k), new Vector3(1f, 1f, 1f));
-					outPut.Add(rotaterZ.MultiplyPoint(newLayerPoint));
+					outPut.Add(rotaterZ.MultiplyPoint3x4(newLayerPoint));
 					rotationZ += rotateZ;
 				}
 				rotationZ = rotateZ;
