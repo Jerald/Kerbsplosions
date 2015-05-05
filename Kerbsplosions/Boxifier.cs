@@ -42,6 +42,7 @@ namespace Kerbsplosions
 		public static VesselBox GetVesselBoundingBox(Vessel vessel)
 		{
 			Vector3[] outputVertices = new Vector3[8];
+            Vector3[] tempVertices = new Vector3[8];
             Box3D[] partBoxArray = new Box3D[vessel.Parts.Count];
 
 			Vector3 maxBounds = new Vector3();
@@ -69,16 +70,19 @@ namespace Kerbsplosions
                 //Vessel bound computation
 
                 //Part vertices computation
-                partBoxArray[i].vertices[0] = new Vector3(partBoundingBox.p1.x, partBoundingBox.p1.y, partBoundingBox.p1.z);
-                partBoxArray[i].vertices[1] = new Vector3(partBoundingBox.p1.x, partBoundingBox.p1.y, partBoundingBox.p2.z);
-                partBoxArray[i].vertices[2] = new Vector3(partBoundingBox.p1.x, partBoundingBox.p2.y, partBoundingBox.p2.z);
+                tempVertices[0] = new Vector3(partBoundingBox.p1.x, partBoundingBox.p1.y, partBoundingBox.p1.z);
 
-                partBoxArray[i].vertices[3] = new Vector3(partBoundingBox.p2.x, partBoundingBox.p2.y, partBoundingBox.p2.z);
-                partBoxArray[i].vertices[4] = new Vector3(partBoundingBox.p2.x, partBoundingBox.p2.y, partBoundingBox.p1.z);
-                partBoxArray[i].vertices[5] = new Vector3(partBoundingBox.p2.x, partBoundingBox.p1.y, partBoundingBox.p1.z);
+                tempVertices[1] = new Vector3(partBoundingBox.p1.x, partBoundingBox.p1.y, partBoundingBox.p2.z);
+                tempVertices[2] = new Vector3(partBoundingBox.p1.x, partBoundingBox.p2.y, partBoundingBox.p2.z);
 
-                partBoxArray[i].vertices[6] = new Vector3(partBoundingBox.p1.x, partBoundingBox.p2.y, partBoundingBox.p1.z);
-                partBoxArray[i].vertices[7] = new Vector3(partBoundingBox.p2.x, partBoundingBox.p1.y, partBoundingBox.p2.z);
+                tempVertices[3] = new Vector3(partBoundingBox.p2.x, partBoundingBox.p2.y, partBoundingBox.p2.z);
+                tempVertices[4] = new Vector3(partBoundingBox.p2.x, partBoundingBox.p2.y, partBoundingBox.p1.z);
+                tempVertices[5] = new Vector3(partBoundingBox.p2.x, partBoundingBox.p1.y, partBoundingBox.p1.z);
+
+                tempVertices[6] = new Vector3(partBoundingBox.p1.x, partBoundingBox.p2.y, partBoundingBox.p1.z);
+                tempVertices[7] = new Vector3(partBoundingBox.p2.x, partBoundingBox.p1.y, partBoundingBox.p2.z);
+
+                partBoxArray[i] = new Box3D(tempVertices);
                 //Part vertices computation
 			}
 

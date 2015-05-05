@@ -9,21 +9,26 @@ namespace Kerbsplosions
     public class IntegrityModule : PartModule
     {
         [KSPField]
-        public float Integrity;
+        public float Integrity = 0.0f;
+
+        //Optional input
+        [KSPField]
+        public float IntegrityModifier = 1;
+        //Optional input
 
         //Non-input KSPFields
         [KSPField(guiActive = true, guiName = "Integrity", guiUnits = "%", guiFormat = "0.00")]
-        public float integrityPercentage;
+        public float integrityPercentage = 0.0f;
 
         [KSPField(isPersistant = true)]
-        public float currentIntegrity = 0f;
+        public float currentIntegrity = 0.0f;
         //Non-input KSPFields
 
         public override void OnStart(PartModule.StartState state)
         {
-            if (Integrity == 0.0F)
+            if (Integrity == 0.0f)
             {
-                Integrity = part.crashTolerance;
+                Integrity = part.crashTolerance * IntegrityModifier;
             }
 
             currentIntegrity = Integrity;
@@ -31,13 +36,10 @@ namespace Kerbsplosions
 
         void Update()
         {
-            if (Integrity != 0.0F)
+            if (Integrity != 0.0f)
             {
                 integrityPercentage = ((currentIntegrity / Integrity) * 100);
             }
-
-            //Debug.Log("[Kerbsplosions] Integrity: " + Integrity);
-            //Debug.Log("[Kerbsplosions] Current Integrity: " + currentIntegrity);
 
             //Part death
             if (currentIntegrity <= 0)

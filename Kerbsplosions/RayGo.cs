@@ -11,7 +11,7 @@ namespace Kerbsplosions
 	{
 		public Vector3[] vertices;
 		public Vector3 center;
-		
+
 		public Box3D(Vector3[] aVertices)
 		{
 			vertices = aVertices;
