@@ -16,16 +16,16 @@ namespace Kerbsplosions
         public string ExplosiveType = "LiquidFuel";
 
         [KSPField]
-        public float DetonationVelocity;
+        public float DetonationVelocity = 0.0f;
 
         [KSPField]
-        public float ExplosiveMass;
+        public float ExplosiveMass = 0.0f;
 
         [KSPField]
-        public float GasDensity;
+        public float GasDensity = 0.0f;
         
         [KSPField]
-        public float ExplosionRadius;
+        public float ExplosionRadius = 0.0f;
 
         //Optional input
         [KSPField]
@@ -51,29 +51,29 @@ namespace Kerbsplosions
             part.OnJustAboutToBeDestroyed += OnExplosion;
 
             //Value override checks
-            if (DetonationVelocity == 0.0F)
+            if (DetonationVelocity == 0.0f)
             {
                 overrideDetonationVelocity = true;
             }
 
-            if (ExplosiveMass == 0.0F)
+            if (ExplosiveMass == 0.0f)
             {
                 overrideExplosiveMass = true;
             }
 
-            if (GasDensity == 0.0F)
+            if (GasDensity == 0.0f)
             {
                 overrideGasDensity = true;
             }
 
-            if (ExplosionRadius == 0.0F)
+            if (ExplosionRadius == 0.0f)
             {
                 overrideExplosionRadius = true;
             }
             //Value override checks
 
             #region Default value loading
-            if (ExplosiveType == "LiquidFuel".ToLower())
+            if (ExplosiveType.ToLower() == "liquidfuel")
             {
                 if (overrideDetonationVelocity)
                 {
@@ -90,13 +90,8 @@ namespace Kerbsplosions
                 {
                     GasDensity = 0.134756f;
                 }
-
-                if (overrideExplosionRadius)
-                {
-                    ExplosionRadius = Mathf.Pow((ExplosiveMass / GasDensity) / ((4 / 3) * Mathf.PI), 1 / 3) * 10;
-                }
             }
-            else if (ExplosiveType == "SolidFuel".ToLower())
+            else if (ExplosiveType.ToLower() == "solidfuel")
             {
                 if (overrideDetonationVelocity)
                 {
@@ -112,13 +107,8 @@ namespace Kerbsplosions
                 {
                     GasDensity = 0.049172025f;
                 }
-
-                if (overrideExplosionRadius)
-                {
-                    ExplosionRadius = Mathf.Pow((ExplosiveMass / GasDensity) / ((4 / 3) * Mathf.PI), 1 / 3) * 10;
-                }
             }
-            else if (ExplosiveType == "TNT".ToLower())
+            else if (ExplosiveType.ToLower() == "tnt")
             {
                 if (overrideDetonationVelocity)
                 {
@@ -133,11 +123,6 @@ namespace Kerbsplosions
                 if (overrideGasDensity)
                 {
                     GasDensity = 0.79865333f;
-                }
-
-                if (overrideExplosionRadius)
-                {
-                    ExplosionRadius = Mathf.Pow((ExplosiveMass / GasDensity) / ((4 / 3) * Mathf.PI), 1 / 3) * 10;
                 }
             }
             #endregion
@@ -156,16 +141,14 @@ namespace Kerbsplosions
 
         void OnExplosion()
         {
-            if (part == null)
-            {
-                Debug.Log("Part is null");
-            }
-            else
-            {
-                Debug.Log("Part isn't null");
-            }
-
- 
+            //Debug.Log("ExplosiveType: " + ExplosiveType);
+            //Debug.Log("DetonationVelocity: " + DetonationVelocity);
+            //Debug.Log("ExplosiveMass: " + ExplosiveMass);
+            //Debug.Log("GasDensity: " + GasDensity);
+            //Debug.Log(overrideDetonationVelocity);
+            //Debug.Log(overrideExplosionRadius);
+            //Debug.Log(overrideExplosiveMass);
+            //Debug.Log(overrideGasDensity);
 
             //ExplosionMass logic for Liquid Fuel
             if (ExplosiveType == "LiquidFuel" && overrideExplosiveMass)
@@ -186,7 +169,12 @@ namespace Kerbsplosions
             }
             //ExplosionMass logic for Liquid Fuel
 
-            Debug.Log("Post explosion mass logic for liquid fuel");
+            //Default explosionRadius calculation
+            if (overrideExplosionRadius)
+            {
+                ExplosionRadius = Mathf.Pow((ExplosiveMass / GasDensity) / ((4 / 3) * Mathf.PI), 1 / 3) * 10;
+            }
+            //Default explosionRadius calculation
 
             //Collider List definition and null check
             List<Collider> collidersToBoom = new List<Collider>(Physics.OverlapSphere(part.transform.position, ExplosionRadius));
@@ -196,24 +184,18 @@ namespace Kerbsplosions
                 testCollider.gameObject.GetComponentInParent<Part>().vessel != null).ToList();
             //Collider List definition and null check
 
-            Debug.Log("Post collider list definition and null check");
-
             //Vessel array definition and filling
             VesselBox[] vesselBoxesToBoom = new VesselBox[collidersToBoom.Count];
-            Debug.Log("Post vesselBoxesToBoom declaration");
             for (int i = 0; i < collidersToBoom.Count; ++i)
             {
                 vesselBoxesToBoom[i] = Boxifier.GetVesselBoundingBox(collidersToBoom[i].gameObject.GetComponentInParent<Part>().vessel);
-                Debug.Log("vesselBoxesToBoom for loop iteration #" + i);
             }
             //Vessel array definition and filling
 
-            Debug.Log("Post vessel array definition and filling");
-
+            //Ray generation
             Vector3[] ray360Output = RayGo.RayThreeSixty(Dispersion, ExplosionRadius);
             Ray[] rays = RayGo.getRays(part.transform.position, vesselBoxesToBoom, ray360Output);
-
-            Debug.Log("Post RayGo calling");
+            //Ray generation
 
             //RaycastHit layered array definition and ray casting
             RaycastHit[][] soManyRaycastHits = new RaycastHit[rays.Length][];
@@ -222,8 +204,6 @@ namespace Kerbsplosions
                 soManyRaycastHits[i] = Physics.RaycastAll(rays[i], ExplosionRadius);
             }
             //RaycastHit layered array definition and ray casting
-
-            Debug.Log("Post RaycastHit layered array definition and ray casting");
 
             //Impulse calculation
             if (ExplosiveMass == 0.0F && (ExplosiveMassLFAtmo > 0.0F || ExplosiveMassLFO > 0.0F))
@@ -237,10 +217,11 @@ namespace Kerbsplosions
             else
             {
                 rayImpulse = 0f;
+                Debug.Log("[Kerbsplosions] Part " + part.name + " has no ray impulse");
             }
             //Impulse calculation
 
-            Debug.Log("[Kerbsplosions] Singular ray impulse: " + rayImpulse);
+            Debug.Log("[Kerbsplosions] Singular ray impulse of part " + part.name + " is " + rayImpulse);
 
             foreach (RaycastHit[] explosiveRay in soManyRaycastHits)
             {
@@ -270,8 +251,6 @@ namespace Kerbsplosions
                     //Damage dealing and out-of-energy check
                 }
             }
-
-            Debug.Log("[Kerbsplosions] End of OnExplosion");
 
             part.OnJustAboutToBeDestroyed -= OnExplosion;
         }
